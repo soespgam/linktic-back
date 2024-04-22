@@ -1,0 +1,425 @@
+openapi: 3.0.3
+info:
+  title: Prueba técnica Sol Espitia - OpenAPI 3.0
+  description: |-
+    Prueba técnica Sol Espitia
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: soespgam@gmail.com
+  version: 1.0.0
+servers:
+  - url: http:127.0.0.1/api
+tags:
+  - name: companies
+    description: CRUD for entity company
+  - name: employees
+    description: CRUD for entity employee
+  - name: auth
+    description: API for Login and logout
+paths:
+  /companies:
+    get:
+      tags:
+        - companies
+      summary: Obtener lista de compañias
+      description: Obtener lista de compañias
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCompanies'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:company
+          - read:company
+  /create-company:
+    post:
+      tags:
+        - companies
+      summary: Crear Compañia
+      description: Crear lista de compañias
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyCreate'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:company
+          - read:company
+  /update-company/${id}:
+    put:
+      tags:
+        - companies
+      summary: Actualizar Compañia
+      description: Actualizar compañia
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: id
+          in: path
+          description: Identificador de la compañia a actualizar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyUpdate'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:company
+          - read:company
+          
+  /delete-company/${id}:
+    delete:
+      tags:
+        - companies
+      summary: Eliminar Compañia
+      description: Eliminar compañia
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: id
+          in: path
+          description: Identificador de la compañia a eliminar
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyUpdate'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:company
+          - read:company
+  /employees:
+    get:
+      tags:
+        - employees
+      summary: Obtener lista de empleados
+      description: Obtener lista de empleados
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEmployees'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:employee
+          - read:employee
+  /create-employee:
+    post:
+      tags:
+        - employees
+      summary: Crear Empleado
+      description: Crear Empleado
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeCreate'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:employee
+          - read:employee
+  /update-employee/${id}:
+    put:
+      tags:
+        - employees
+      summary: Actualizar empleado
+      description: Actualizar empleado
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: id
+          in: path
+          description: Identificador del empleado a actualizar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeUpdate'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:employee
+          - read:employee
+  /delete-employee/${id}:
+    delete:
+      tags:
+        - employees
+      summary: Eliminar Empleado
+      description: Eliminar Empleado
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: id
+          in: path
+          description: Identificador del empleado a eliminar
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeCreate'
+        '401':
+          description: UnAuthorized se necesita loguear
+      security:
+        - token:
+          - write:employee
+          - read:employee
+  /loginauth:
+    post:
+      tags:
+        - auth
+      summary: Servicio de Log In y obtener Token
+      description: Servicio de Log In y obtener Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseLogin'
+      security:
+        - token:
+          - write:login
+          - read:login
+  /logout:
+    get:
+      tags:
+        - auth
+      summary: Servicio de Log out
+      description: Servicio de Log out
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseLogout'
+      security:
+        - token:
+          - write:login
+          - read:login
+components:
+  schemas:
+    GetCompanies:
+      type: array
+      items:
+        type: object
+        oneOf: 
+          - $ref : '#/components/schemas/CompanyUpdate'
+    GetEmployees:
+      type: array
+      items:
+        type: object
+        oneOf: 
+          - $ref : '#/components/schemas/EmployeeUpdate'   
+    CompanyUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          description: Nombre de la Compañia
+          example: NombreCompañia
+        email:
+          type: string
+          description: Email de la Compañia
+          example: admin@admind.com
+        logo:
+          type: string
+          description: Logo de la Compañia
+          example: foto.png
+        web_site:
+          type: string
+          description: URL del sitio
+          example: www.test.com
+    CompanyCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la Compañia
+          example: NombreCompañia
+        email:
+          type: string
+          description: Email de la Compañia
+          example: admin@admind.com
+        logo:
+          type: string
+          description: Logo de la Compañia
+          example: foto.png
+        web_site:
+          type: string
+          description: URL del sitio
+          example: www.test.com
+    EmployeeUpdate:
+      type: object
+      properties: 
+        id:
+          type: integer
+          format: int64
+          example: 10
+        full_name:
+          type: string
+          description: Nombre del Empleado
+          example: Sol Espitia
+        company_name: 
+          type: string
+          description: Compañia asociada al Empleado
+          example: NombreCompañia
+        email:
+          type: string
+          description: Email del Empleado
+          example: admin@admind.com
+        rol:
+          type: string
+          description: Rol asociado al empleado
+          example: administrador punto venta
+    EmployeeCreate:
+      type: object
+      properties:
+        full_name:
+          type: string
+          description: Nombre del Empleado
+          example: Sol Espitia
+        company_name: 
+          type: string
+          description: Compañia asociada al Empleado
+          example: NombreCompañia
+        email:
+          type: string
+          description: Email del Empleado
+          example: admin@admind.com
+        rol:
+          type: string
+          description: Rol asociado al empleado
+          example: administrador punto venta
+    Login: 
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email del Usuario
+          example: admin@admind.com
+        password:
+          type: string
+          description: Email del Empleado
+          example: password
+    ResponseLogin:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: Token de Acceso
+          example: 123asd
+        message:
+          type: string
+          description: Mensaje del estado del log in
+          example: Login hecho correctamente
+        status:
+          type: boolean
+          description: Estado de la transacción true(ok)
+          example: true
+    ResponseLogout:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje del estado del log out
+          example: Login hecho correctamente
+        status:
+          type: boolean
+          description: Estado de la transacción true(ok)
+          example: true
+  securitySchemes:
+    token:
+      name: token
+      type: apiKey 
+      in: header
+      description: Token de autorización para consumo de servicio
+  parameters:
+    token: 
+      in: header
+      name: Token
+      description: Token de autorización
+      required: true
+      schema:
+        type: string
